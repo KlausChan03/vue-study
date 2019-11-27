@@ -1,9 +1,9 @@
 # Vue.js
-## 基础
+## 起步
 ### 通过src在项目中引入vue.js
-1. 入门语法
+1. 初窥门径
    ```
-       <div id="app">
+    <div id="app">
         {{message}}
     </div>
 
@@ -118,9 +118,9 @@
         })
         vm3.seen = true;
         vm4.todos.push({ text: '抽时间重构旧项目' });
-        
+    </script>
     ```
-2. 常用特性
+2. 常用指令
    1. 条件渲染（v-if / v-show） 
       1. v-if 是“真正”的条件渲染，因为它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。
       2. 相比之下，v-show 就简单得多——不管初始条件是什么，元素总是会被渲染，并且只是简单地基于 CSS 进行切换。
@@ -129,6 +129,35 @@
    3. 事件处理（v-on）
    4. 表单输入绑定（v-model）
       1. v-model 会忽略所有表单元素的 value、checked、selected 特性的初始值而总是将 Vue 实例的数据作为数据来源。你应该通过 JavaScript 在组件的 data 选项中声明初始值。
+3. 组件
+   1. 命名：支持使用 kebab-case 和使用 PascalCase。自己习惯使用前者。
+   2. 注册：支持全局和局部注册。
+      1. 局部注册 局部注册的组件在其子组件中不可用。 
+        ```
+        var ComponentA = { /* ... */ }
+        var ComponentB = {
+        components: {
+            'component-a': ComponentA
+        },
+        // ...
+        }
+
+        // ES2015模块
+        import ComponentA from './ComponentA.vue'
+        export default {
+        components: {
+            ComponentA
+        },
+        // ...
+        }
+        ```
+4. 过渡 & 动画
+   1. 
+5. 
+
+       
+
+## 进阶
 ### 通过脚手架vue-cli构建项目
 1. 引入外部模块
    1. 在 vue 中优雅的使用第三方库
@@ -141,3 +170,12 @@
         }
         }
         ```
+        
+# 疑难杂症
+## 安装依赖
+### 解决sass安装失败
+```
+npm install yarn 
+yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass -g
+yarn install
+```
