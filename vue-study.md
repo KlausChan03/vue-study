@@ -152,7 +152,22 @@
         }
         ```
 4. 过渡 & 动画
-   1. 
+   1. 单元素/组件的过渡
+        #### Vue 提供了 transition 的封装组件，在下列情形中，可以给任何元素和组件添加进入/离开过渡
+      1. 条件渲染 (使用 v-if)
+      2. 条件展示 (使用 v-show)
+      3. 动态组件
+      4. 组件根节点
+         1. 过渡的类名
+            1. v-enter：定义进入过渡的开始状态。在元素被插入之前生效，在元素被插入之后的下一帧移除。
+            2. v-enter-active：定义进入过渡生效时的状态。在整个进入过渡的阶段中应用，在元素被插入之前生效，在过渡/动画完成之后移除。这个类可以被用来定义进入过渡的过程时间，延迟和曲线函数。
+            3. v-enter-to: 定义进入过渡的结束状态。在元素被插入之后下一帧生效 (与此同时 v-enter 被移除)，在过渡/动画完成之后移除。
+            4. v-leave: 定义离开过渡的开始状态。在离开过渡被触发时立刻生效，下一帧被移除。
+            5. v-leave-active：定义离开过渡生效时的状态。在整个离开过渡的阶段中应用，在离开过渡被触发时立刻生效，在过渡/动画完成之后移除。这个类可以被用来定义离开过渡的过程时间，延迟和曲线函数。
+            6. v-leave-to: 定义离开过渡的结束状态。在离开过渡被触发之后下一帧生效 (与此同时 v-leave 被删除)，在过渡/动画完成之后移除。
+
+   2. 多个元素的过渡
+      1. 
 5. 
 
        
@@ -162,13 +177,24 @@
 1. 引入外部模块
    1. 在 vue 中优雅的使用第三方库
         ```
+        eg1:
+        main.js
         import moment from 'moment'
         Object.defineProperty(Vue.prototype, '$moment', { value: moment })
+        ...
+        xx.vue
         export default {
-        created() {
-            console.log('The time is '.this.$moment().format('HH:mm'))
+            created() {
+                console.log('The time is '.this.$moment().format('HH:mm'))
+            }
         }
-        }
+        eg2:
+        main.js
+        import lodash from 'lodash'
+        Object.defineProperty(Vue.prototype, '_', { value: lodash })
+        xx.vue
+        _this.dataList.startList = _.sortBy(_this.dataList.startList, function(o) { return o.eventStatus; });
+        
         ```
         
 # 疑难杂症
@@ -179,3 +205,5 @@ npm install yarn
 yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass -g
 yarn install
 ```
+## 使用规范
+### 不能在重复引入computed和watch等Vue属性，否则后者会覆盖前者。

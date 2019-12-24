@@ -20,7 +20,7 @@
     </div>
 
     <div id="app3">
-        <p v-if="seen">现在你看到我了。</p>
+        <p v-if="seen">{{content}}</p>
     </div>
 
     <div id="app4">
@@ -68,7 +68,8 @@
         var vm3 = new Vue({
             el: "#app3",
             data: {
-                seen: false
+                seen: true,
+                content: '123'
             }
         })
 
@@ -119,7 +120,7 @@
                 ]
             }
         })
-        vm3.seen = true;
+        // vm3.seen = true;
         vm4.todos.push({ text: '抽时间重构旧项目' });
     </script>
 </body>
