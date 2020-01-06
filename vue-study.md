@@ -170,8 +170,6 @@
       1. 
 5. 
 
-       
-
 ## 进阶
 ### 通过脚手架vue-cli构建项目
 1. 引入外部模块
@@ -185,7 +183,7 @@
         xx.vue
         export default {
             created() {
-                console.log('The time is '.this.$moment().format('HH:mm'))
+                console.log('The time is 'this.$moment().format('HH:mm'))
             }
         }
         eg2:
@@ -196,7 +194,8 @@
         _this.dataList.startList = _.sortBy(_this.dataList.startList, function(o) { return o.eventStatus; });
         
         ```
-        
+### 路由
+
 # 疑难杂症
 ## 安装依赖
 ### 解决sass安装失败
