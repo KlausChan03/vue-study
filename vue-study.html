@@ -57,7 +57,10 @@
             <!-- <router-link> 默认会被渲染成一个 `<a>` 标签 -->
             <router-link to="/foo">Go to Foo</router-link>
             <router-link to="/bar">Go to Bar</router-link>
-            <span @click="push()">Go to Bar2</span>
+            <router-link to="/qux">Go to Qux</router-link>
+            <a href="#" @click="push">Go to Baz</a>
+            <a href="#" @click="pushWildcard">Go to *</a>
+            
         </p>
         <!-- 路由出口 -->
         <!-- 路由匹配到的组件将渲染在这里 -->
@@ -154,6 +157,7 @@
             text: '抽时间重构旧项目'
         });
 
+        // vue router 例子
         // 0. 如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(VueRouter)
 
         // 1. 定义 (路由) 组件。
@@ -164,20 +168,38 @@
         const Bar = {
             template: '<div>bar</div>'
         }
+        const Baz = {
+            template: '<div>baz {{ $route.params.id }}</div>'
+        }
+        const UnfoundPage = {
+            template: '<div>404 {{ $route.params.pathMatch }}</div>'
+        }
 
         // 2. 定义路由
         // 每个路由应该映射一个组件。 其中"component" 可以是
         // 通过 Vue.extend() 创建的组件构造器，
         // 或者，只是一个组件配置对象。
         // 我们晚点再讨论嵌套路由。
-        const routes = [{
+        const routes = [
+            
+            {
                 path: '/foo',
                 component: Foo
             },
             {
                 path: '/bar',
                 component: Bar
-            }
+            },
+            {
+                path: '/baz/:id',
+                component: Baz
+            },
+            {
+                // 会匹配所有路径
+                path: '*',
+                component: UnfoundPage
+            },
+            
         ]
 
         // 3. 创建 router 实例，然后传 `routes` 配置
@@ -193,9 +215,11 @@
             router,
             methods: {
                 push() {
-                    this.$router.push({
-                        path: '/bar'
-                    })
+                    this.$router.push('/baz/home')
+                },
+                pushWildcard(){
+                    this.$router.push('/non-existing')
+                    this.$route.params.pathMatch // '/non-existing'
                 }
             }
         }).$mount('#app8')

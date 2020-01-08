@@ -1,126 +1,8 @@
 # Vue.js
 ## 起步
 ### 通过src在项目中引入vue.js
-1. 初窥门径
-   ```
-    <div id="app">
-        {{message}}
-    </div>
 
-    <div id="app2">
-        <span :title="message">
-            测试一下
-        </span>
-    </div>
-
-    <div id="app3">
-        <p v-if="seen">现在你看到我了。</p>
-    </div>
-
-    <div id="app4">
-        <ol>
-            <li v-for="todo in todos">
-                {{ todo.text }}
-            </li>
-        </ol>
-    </div>
-    
-    <div id="app5">
-        <p>{{ message }}</p>
-        <button v-on:click="reverseMessage">反转信息</button>
-    </div>
-
-    <div id="app6">
-        <p>{{ message }}</p>
-        <input type="text" v-model="message">
-    </div>
-
-    <div id="app7">
-        <ol>
-            <todo-item
-                v-for="item in groceryList"
-                v-bind:todo="item"
-                v-bind:key="item.id"
-            ></todo-item>
-        </ol>
-    </div>
-
-    <script>
-        // 声明式渲染
-        var vm = new Vue({
-            el: "#app",
-            data: {
-                message: "i am back"
-            }
-        })
-
-        var vm2 = new Vue({
-            el: "#app2",
-            data: {
-                message: '页面加载于' + new Date().toLocaleString()
-            }
-        })
-
-        // 条件与循环
-        var vm3 = new Vue({
-            el: "#app3",
-            data: {
-                seen: false
-            }
-        })
-
-        var vm4 = new Vue({
-            el: "#app4",
-            data: {
-                todos: [
-                    { text: '学习 Javascript' },
-                    { text: '学习 Typescript' },
-                    { text: '学习 Vue' },
-                    { text: '整个有意义的项目' }
-                ]
-            }
-        })
-        
-        // 处理用户输入
-        var vm5 = new Vue({
-            el: "#app5",
-            data: {
-                message: "Hello Vue.js"
-            },
-            methods: {
-                reverseMessage: function() {
-                    this.message = this.message.split('').reverse().join('');
-                }
-            }
-        })
-
-        var vm6 = new Vue({
-            el: "#app6",
-            data: {
-                message: 'Hello Vue!'
-            }
-        })
-
-        // 组件化应用构建
-        Vue.component('todo-item', {
-            props: ['todo'],
-            template: '<li>{{ todo.text }}</li>'
-        })
-
-        var vm7 = new Vue({
-            el: "#app7",
-            data: {
-                groceryList: [
-                    { id: 0, text: '蔬菜'},
-                    { id: 1, text: '水果'}
-                ]
-            }
-        })
-        vm3.seen = true;
-        vm4.todos.push({ text: '抽时间重构旧项目' });
-    </script>
-    ```
-2. 常用指令
+1. 常用指令
    1. 条件渲染（v-if / v-show） 
       1. v-if 是“真正”的条件渲染，因为它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。
       2. 相比之下，v-show 就简单得多——不管初始条件是什么，元素总是会被渲染，并且只是简单地基于 CSS 进行切换。
@@ -129,7 +11,7 @@
    3. 事件处理（v-on）
    4. 表单输入绑定（v-model）
       1. v-model 会忽略所有表单元素的 value、checked、selected 特性的初始值而总是将 Vue 实例的数据作为数据来源。你应该通过 JavaScript 在组件的 data 选项中声明初始值。
-3. 组件
+2. 组件
    1. 命名：支持使用 kebab-case 和使用 PascalCase。自己习惯使用前者。
    2. 注册：支持全局和局部注册。
       1. 局部注册 局部注册的组件在其子组件中不可用。 
@@ -151,7 +33,7 @@
         // ...
         }
         ```
-4. 过渡 & 动画
+3. 过渡 & 动画
    1. 单元素/组件的过渡
         #### Vue 提供了 transition 的封装组件，在下列情形中，可以给任何元素和组件添加进入/离开过渡
       1. 条件渲染 (使用 v-if)
@@ -167,8 +49,6 @@
             6. v-leave-to: 定义离开过渡的结束状态。在离开过渡被触发之后下一帧生效 (与此同时 v-leave 被删除)，在过渡/动画完成之后移除。
             ![image](https://github.com/KlausChan03/vue-study/raw/master/images/transition.png)
    2. 多个元素的过渡
-      1. 
-5. 
 
 ## 进阶
 ### 通过脚手架vue-cli构建项目
@@ -194,7 +74,161 @@
         _this.dataList.startList = _.sortBy(_this.dataList.startList, function(o) { return o.eventStatus; });
         
         ```
-### 路由
+# 路由 (Vue Router)
+## 动态路由匹配
+我们经常需要把某种模式匹配到的所有路由，全都映射到同个组件。例如，我们有一个 User 组件，对于所有 ID 各不相同的用户，都要使用这个组件来渲染。那么，我们可以在 vue-router 的路由路径中使用“动态路径参数”(dynamic segment) 来达到这个效果  
+```
+const User = {
+  template: '<div>User</div>'
+}
+
+const router = new VueRouter({
+  routes: [
+    // 动态路径参数 以冒号开头
+    { path: '/user/:id', component: User }
+  ]
+})
+```  
+现在呢，像 /user/foo 和 /user/bar 都将映射到相同的路由。  
+一个“路径参数”使用冒号 : 标记。当匹配到一个路由时，参数值会被设置到 this.$route.params，可以在每个组件内使用。于是，我们可以更新 User 的模板，输出当前用户的 ID：
+
+```
+const User = {
+  template: '<div>User {{ $route.params.id }}</div>'
+}
+```
+### 响应路由参数的变化
+当使用路由参数时，例如从 /user/foo 导航到 /user/bar，**原来的组件实例会被复用**。因为两个路由都渲染同个组件，比起销毁再创建，复用则显得更加高效。**不过，这也意味着组件的生命周期钩子不会再被调用**。  
+复用组件时，想对路由参数的变化作出响应的话，你可以简单地 watch (监测变化) $route 对象：  
+```
+const User = {
+  template: '...',
+  watch: {
+    '$route' (to, from) {
+      // 对路由变化作出响应...
+    }
+  }
+}
+```  
+或者使用 beforeRouteUpdate 导航守卫：
+```
+const User = {
+  template: '...',
+  beforeRouteUpdate (to, from, next) {
+    // react to route changes...
+    // don't forget to call next()
+  }
+}
+```
+### 捕获所有路由或 404 Not found 路由
+常规参数只会匹配被 / 分隔的 URL 片段中的字符。如果想匹配**任意路径**，我们可以使用通配符 (*)： 
+```
+{
+  // 会匹配所有路径
+  path: '*'
+}
+{
+  // 会匹配以 `/user-` 开头的任意路径
+  path: '/user-*'
+}
+```
+当使用一个通配符时，$route.params 内会自动添加一个名为 pathMatch 参数。它包含了 URL 通过通配符被匹配的部分：  
+```
+// 给出一个路由 { path: '/user-*' }
+this.$router.push('/user-admin')
+this.$route.params.pathMatch // 'admin'
+// 给出一个路由 { path: '*' }
+this.$router.push('/non-existing')
+this.$route.params.pathMatch // '/non-existing'
+```
+### 匹配优先级  
+有时候，同一个路径可以匹配多个路由，此时，匹配的优先级就按照路由的定义顺序：谁先定义的，谁的优先级就最高。  
+## 编程式的导航  
+除了使用 \<router-link> 创建 a 标签来定义导航链接，我们还可以借助 router 的实例方法，通过编写代码来实现。
+```
+router.push(location, onComplete?, onAbort?)
+```
+```
+router.replace(location, onComplete?, onAbort?)
+```
+| 声明式 | 编程式 | 
+| :----: | :----: | 
+| ```<router-link :to="...">``` | ```router.push(...)``` |  
+```
+// 字符串
+router.push('home')
+
+// 对象
+router.push({ path: 'home' })
+
+// 命名的路由
+router.push({ name: 'user', params: { userId: '123' }})
+
+// 带查询参数，变成 /register?plan=private
+router.push({ path: 'register', query: { plan: 'private' }})
+```  
+**注意：如果提供了 path，params 会被忽略，上述例子中的 query 并不属于这种情况。取而代之的是下面例子的做法，你需要提供路由的 name 或手写完整的带有参数的 path：**
+```
+const userId = '123'
+router.push({ name: 'user', params: { userId }}) // -> /user/123
+router.push({ path: `/user/${userId}` }) // -> /user/123
+// 这里的 params 不生效
+router.push({ path: '/user', params: { userId }}) // -> /user
+```
+**同样的规则也适用于 router-link 组件的 to 属性。**
+
+router.replace 跟 router.push 很像，唯一的不同就是，它不会向 history 添加新记录，而是跟它的方法名一样 —— 替换掉当前的 history 记录。
+
+在 router.push 或 router.replace 中提供 onComplete 和 onAbort 回调作为第二个和第三个参数。这些回调将会在导航成功完成 (在所有的异步钩子被解析之后) 或终止 (导航到相同的路由、或在当前导航完成之前导航到另一个不同的路由) 的时候进行相应的调用。
+
+```
+router.go(n)
+```
+这个方法的参数是一个整数，意思是在 history 记录中向前或者后退多少步，类似 window.history.go(n)。
+
+Vue Router 的导航方法 (push、 replace、 go) 在各类路由模式 (history、 hash 和 abstract) 下表现一致。
+
+## 命名路由
+有时候，通过一个名称来标识一个路由显得更方便一些，特别是在链接一个路由，或者是执行一些跳转的时候。你可以在在创建 Router 实例的时候，在 routes 配置中给某个路由设置名称。
+```
+const router = new VueRouter({
+  routes: [
+    {
+      path: '/user/:userId',
+      name: 'user',
+      component: User
+    }
+  ]
+})
+```
+要链接到一个命名路由，可以给 router-link 的 to 属性传一个对象，也可以调用 router.push()：
+```
+<router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>
+
+router.push({ name: 'user', params: { userId: 123 }})
+```
+## 命名视图
+有时候想同时 (同级) 展示多个视图，而不是嵌套展示，例如创建一个布局，有 sidebar (侧导航) 和 main (主内容) 两个视图，这个时候命名视图就派上用场了。你可以在界面中拥有多个单独命名的视图，而不是只有一个单独的出口。如果 router-view 没有设置名字，那么默认为 default。
+```
+<router-view class="view one"></router-view>
+<router-view class="view two" name="a"></router-view>
+<router-view class="view three" name="b"></router-view>
+```
+一个视图使用一个组件渲染，因此对于同个路由，多个视图就需要多个组件。确保正确使用 components 配置 (带上 s)：
+```
+const router = new VueRouter({
+  routes: [
+    {
+      path: '/',
+      components: {
+        default: Foo,
+        a: Bar,
+        b: Baz
+      }
+    }
+  ]
+})
+```
 
 # 疑难杂症
 ## 安装依赖
