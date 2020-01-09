@@ -46,8 +46,9 @@
             3. v-enter-to: 定义进入过渡的结束状态。在元素被插入之后下一帧生效 (与此同时 v-enter 被移除)，在过渡/动画完成之后移除。
             4. v-leave: 定义离开过渡的开始状态。在离开过渡被触发时立刻生效，下一帧被移除。
             5. v-leave-active：定义离开过渡生效时的状态。在整个离开过渡的阶段中应用，在离开过渡被触发时立刻生效，在过渡/动画完成之后移除。这个类可以被用来定义离开过渡的过程时间，延迟和曲线函数。
-            6. v-leave-to: 定义离开过渡的结束状态。在离开过渡被触发之后下一帧生效 (与此同时 v-leave 被删除)，在过渡/动画完成之后移除。
-            ![image](https://github.com/KlausChan03/vue-study/raw/master/images/transition.png)
+            6. v-leave-to: 定义离开过渡的结束状态。在离开过渡被触发之后下一帧生效 (与此同时 v-leave 被删除)，在过渡/动画完成之后移除。 
+
+        ![image](https://github.com/KlausChan03/vue-study/raw/master/images/transition.png)
    2. 多个元素的过渡
 
 ## 进阶
@@ -229,10 +230,15 @@ const router = new VueRouter({
   ]
 })
 ```
+
 # 状态管理 (Vuex)
+
 ## Vuex 是什么？
+
 Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。
+
 ### 什么是“状态管理模式”？
+
 状态自管理应用包含以下几个部分：
 - state，驱动应用的数据源；
 - view，以声明方式将 state 映射到视图；
@@ -253,7 +259,62 @@ Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。它采用�
 
 通过定义和隔离状态管理中的各种概念并通过强制规则维持视图和状态间的独立性，我们的代码将会变得更结构化且易维护。
 
-![image](https://github.com/KlausChan03/vue-study/raw/master/images/vuex.png)  
+![image](https://github.com/KlausChan03/vue-study/raw/master/images/vuex.png)    
+
+## Vuex 是什么？  
+
+每一个 Vuex 应用的核心就是 store（仓库）。“store”基本上就是一个容器，它包含着你的应用中大部分的状态 (state)。Vuex 和单纯的全局对象有以下两点不同： 
+
+1. Vuex 的状态存储是响应式的。当 Vue 组件从 store 中读取状态的时候，若 store 中的状态发生变化，那么相应的组件也会相应地得到高效更新。  
+
+2. 你不能直接改变 store 中的状态。改变 store 中的状态的唯一途径就是显式地提交 (commit) mutation。这样使得我们可以方便地跟踪每一个状态的变化，从而让我们能够实现一些工具帮助我们更好地了解我们的应用。  
+
+## 开始
+  
+### 最简单的 Store 
+
+安装 Vuex 之后，让我们来创建一个 store。创建过程直截了当——仅需要提供一个初始 state 对象和一些 mutation：
+```
+// 如果在模块化构建系统中，请确保在开头调用了 Vue.use(Vuex)
+
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  }
+})
+```
+现在，你可以通过 store.state 来获取状态对象，以及通过 store.commit 方法触发状态变更：  
+
+```
+store.commit('increment')
+
+console.log(store.state.count) // -> 1
+```  
+
+## 核心概念
+
+### State
+
+> state就是Vuex中的公共的状态，我是将state看作是所有组件的data， 用于保存所有组件的公共数据。   
+
+### Getter
+
+> 我将getters属性理解为所有组件的computed属性, 也就是计算属性. vuex的官方文档也是说到可以将getter理解为store的计算属性, getters的返回值会根据它的依赖被缓存起来，且只有当它的依赖值发生了改变才会被重新计算。  
+
+### Mutations
+
+> 我将mutaions理解为store中的methods属性, mutations对象中保存着更改数据的回调函数,该函数名官方规定叫type, 第一个参数是state, 第二参数是payload, 也就是自定义的参数。  
+
+### Actions
+
+Action 类似于 mutation，不同在于：
+- Action 提交的是 mutation，而不是直接变更状态。
+- Action 可以包含任意异步操作。
 
 # 疑难杂症
 ## 安装依赖
